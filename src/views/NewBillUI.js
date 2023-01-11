@@ -53,9 +53,10 @@ export default () => {
                     <label for="commentary" class="bold-label">Commentaire</label>
                     <textarea class="form-control blue-border" data-testid="commentary" rows="3"></textarea>
                   </div>
-                  <div class="col-half">
+                  <div class="col-half" id="file-parent">
                     <label for="file" class="bold-label">Justificatif</label>
                     <input required type="file" class="form-control blue-border" data-testid="file" />
+                    <p class="message hidden">Votre fichier n'est pas au bon format. Veuillez privilégier plutôt un format .jpeg, .jpg ou .png</p>
                   </div>
                 </div>
             </div>
