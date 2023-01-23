@@ -34,6 +34,8 @@ class ApiEntity {
   constructor({key, api}) {
     this.key = key;
     this.api = api;
+    console.log(this.key)
+    console.log(this.api)
   }
   async select({selector, headers = {}}) {
     return await (this.api.get({url: `/${this.key}/${selector}`, headers: getHeaders(headers)}))
@@ -58,15 +60,15 @@ class Store {
   constructor() {
     this.api = new Api({baseUrl: 'http://localhost:5678'})
   }
-
   user = uid => (new ApiEntity({key: 'users', api: this.api})).select({selector: uid})
   users = () => new ApiEntity({key: 'users', api: this.api})
   login = (data) => this.api.post({url: '/auth/login', data, headers: getHeaders({noAuthorization: true})})
-
+  
   ref = (path) => this.store.doc(path)
-
+  
   bill = bid => (new ApiEntity({key: 'bills', api: this.api})).select({selector: bid})
   bills = () => new ApiEntity({key: 'bills', api: this.api})
+  
 }
 
 export default new Store()
