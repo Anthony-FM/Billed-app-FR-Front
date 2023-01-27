@@ -34,8 +34,6 @@ class ApiEntity {
   constructor({key, api}) {
     this.key = key;
     this.api = api;
-    console.log(this.key)
-    console.log(this.api)
   }
   async select({selector, headers = {}}) {
     return await (this.api.get({url: `/${this.key}/${selector}`, headers: getHeaders(headers)}))

@@ -33,22 +33,20 @@ export default class NewBill {
       this.document.querySelector(`input[data-testid="file"]`).value = ''
       
     } else {
-      this.document.querySelector(".message").classList.remove("hidden")
-      this.document.querySelector(`.message`).textContent = "";
-      
-        this.store
-          .bills()
-          .create({
-            data: formData,
-            headers: {
-              noContentType: true
-            }
-          })
-          .then(({fileUrl, key}) => {
-            this.billId = key
-            this.fileUrl = fileUrl
-            this.fileName = fileName
-          }).catch(error => console.error(error))
+      this.document.querySelector(".message").classList.add("hidden"); 
+      this.store
+        .bills()
+        .create({
+          data: formData,
+          headers: {
+            noContentType: true
+          }
+        })
+        .then(({fileUrl, key}) => {
+          this.billId = key
+          this.fileUrl = fileUrl
+          this.fileName = fileName
+        }).catch(error => console.error(error))
       
     }
     
@@ -70,7 +68,6 @@ export default class NewBill {
       fileName: this.fileName,
       status: 'pending'
     }
-    console.log(bill)
     this.updateBill(bill)
     this.onNavigate(ROUTES_PATH['Bills'])
   }
