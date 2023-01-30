@@ -110,13 +110,13 @@ describe("Given I am connected as an employee", () => {
       // newBill.billId = "123456"
 
       filesInput.forEach(fileInput => {
-        
+        // On charge un fichier avec la mauvaise extension (.pdf)
         fileInput.addEventListener('change', handleChangeFile)
         userEvent.upload(fileInput, pdfFile);
         expect(errorMessage).not.toHaveClass('hidden')           
         expect(handleChangeFile).toHaveBeenCalled()  
-        
-        fileInput.addEventListener('change', newBill.handleChangeFile())
+        // Puis on charge a nouveau un fichier mais cette fois-ci au bon format (.jpeg)
+        fileInput.addEventListener('change', handleChangeFile)
         userEvent.upload(fileInput, jpegFile);
         expect(errorMessage).toHaveClass('hidden')           
         expect(handleChangeFile).toHaveBeenCalled()  
