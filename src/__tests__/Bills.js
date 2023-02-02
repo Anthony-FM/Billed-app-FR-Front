@@ -9,15 +9,13 @@ import "@testing-library/jest-dom/extend-expect";
 
 import {localStorageMock} from "../__mocks__/localStorage.js";
 import mockStore from "../__mocks__/store"
+
 import BillsUI from "../views/BillsUI.js"
 import Bills from "../containers/Bills.js";
 
 import { bills } from "../fixtures/bills.js";
 import { ROUTES, ROUTES_PATH } from "../constants/routes"
 import router from "../app/Router.js";
-
-
-
 
 jest.mock("../app/Store", () => mockStore); //Initialisation du mockStore
 
@@ -41,6 +39,7 @@ describe("Given I am connected as an employee", () => {
 
 
     })
+    //Test du trie des tickets par ordre du + récent au plus ancien
     test("Then bills should be ordered from earliest to latest", () => {
       document.body.innerHTML = BillsUI({ data: bills })
       const dates = screen
@@ -50,6 +49,7 @@ describe("Given I am connected as an employee", () => {
       const datesSorted = [...dates].sort(antiChrono)
       expect(dates).toEqual(datesSorted)
     })
+    // On test le chemin à parcourir
     test("Then the function handleClickNewBill should return the rigth path", async () => {      
       const root = document.createElement("div")
       root.setAttribute("id", "root")
@@ -63,6 +63,7 @@ describe("Given I am connected as an employee", () => {
     
   })
   
+  // Test au click sur l'ouverture de la modale
   describe("When I click on eye icon", () => {
     test("Then the modal is open", () => {
       Object.defineProperty(window, 'localStorage', { value: localStorageMock })
@@ -86,11 +87,14 @@ describe("Given I am connected as an employee", () => {
       document.body.innerHTML = BillsUI({ data:bills })
       const eyesIcon = screen.getAllByTestId('icon-eye')
 
-      $.fn.modal = jest.fn();
-      jest.spyOn(bill, "handleClickIconEye")
+      $.fn.modal = jest.fn(); // Initialisation de la fonction modal
+
+      jest.spyOn(bill, "handleClickIconEye") // On espionne la fonction 
+
       const modalEmployee = screen.getByTestId('modalEmployee')
       $.fn.modal = jest.fn(() => modalEmployee.classList.add("show"));
-      const handleClickIconEye1=jest.fn(bill.handleClickIconEye)      
+      const handleClickIconEye1=jest.fn(bill.handleClickIconEye)   
+         
       eyesIcon.forEach(eyeIcon => {
         eyeIcon.addEventListener('click', handleClickIconEye1(eyeIcon))      
         userEvent.click(eyeIcon)
