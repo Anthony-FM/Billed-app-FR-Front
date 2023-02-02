@@ -82,6 +82,11 @@ const mockedBills = {
       "pct": 20
     })
   },
+  post: (data) => {
+    Promise.resolve({
+      data: [data]
+    })
+  }
 }
 
 export default {
