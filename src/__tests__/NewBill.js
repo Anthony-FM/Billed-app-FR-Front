@@ -21,6 +21,7 @@ jest.mock("../app/Store", () => mockStore);
 
 describe("Given I am connected as an employee", () => {
   describe("When I am on NewBill Page",  () => {
+    // Pour chaque test =>
     beforeEach(() => {
       // On simule la connection à la page Employée
       Object.defineProperty(window, 'localStorage', { value: localStorageMock })
@@ -40,12 +41,14 @@ describe("Given I am connected as an employee", () => {
       
     })
     
+    // on teste si l'icône mail possède la classe 'active-icon'
     test("Then mail icon in vertical layout should be highlighted",  () => {
 
       const mailIcon = screen.getByTestId('icon-mail')
       expect(mailIcon).toHaveClass('active-icon')
 
     })
+    // On teste si tous les icônes qui sont sensé être requis possèdent bien la propriété 'required'
     test('Then All required input are required', () => {
       let expenseType = screen.getAllByTestId('expense-type')
       expect(expenseType[0]).toHaveAttribute(`required`)
@@ -59,7 +62,8 @@ describe("Given I am connected as an employee", () => {
       expect(file[0]).toHaveAttribute(`required`)
     })  
 
-    test("Then we change the file, the handlechangeFile() function is activated", async () => {
+    // On test le chargement d'un mauvais type de fichier
+    test("Then we change the wrong type of file, the handlechangeFile() function is activated and a error message appear", async () => {
       const newBill = new NewBill({
         document,
         onNavigate, 
@@ -67,34 +71,33 @@ describe("Given I am connected as an employee", () => {
         bills:bills, 
         localStorage: window.localStorage
       })
+
+      // On récupère et espionne la fonction handleChangeFile()
       const handleChangeFile = jest.spyOn(newBill, "handleChangeFile")
       newBill.handleChangeFile = jest.fn()
-      const filesInput = screen.getAllByTestId('file')
-      const errorMessage = screen.getByTestId('errorMessage')
+
+      const filesInput = screen.getAllByTestId('file') // Constante de l'input file
+      const errorMessage = screen.getByTestId('errorMessage') // Constante du paragraphe 'p' du message d'erreur
+
+      // On initialise un nouveau mauvais type de fichier
       const pdfFile = new File (["document"], "document.pdf", {
         type: 'application/pdf'
         }
-      )
-      const jpegFile = new File (["image"], "facturefreemobile.jpg", {
-        type: 'image/jpg'
-        }
-      )      
+      )     
 
       filesInput.forEach(fileInput => {
         // On charge un fichier avec la mauvaise extension (.pdf)
         fileInput.addEventListener('change', handleChangeFile)
         userEvent.upload(fileInput, pdfFile);
-        expect(errorMessage).not.toHaveClass('hidden')           
+        // On s'attend à ce que le message d'erreur ne possède plus la classe hidden
+        expect(errorMessage).not.toHaveClass('hidden')    
+        // On s'attend à ce que la fonction soit appelée       
         expect(handleChangeFile).toHaveBeenCalled()  
-        // Puis on charge a nouveau un fichier mais cette fois-ci au bon format (.jpeg)
-        // fileInput.addEventListener('change', handleChangeFile)
-        // userEvent.upload(fileInput, jpegFile);
-        // expect(errorMessage).toHaveClass('hidden')  
-      })  
-                
+      })                  
 
     })
 
+    // On crée un nouveau ticket
     test('Then on submit we create a new Bill', () => {
       // On crée la page de la facture
       const newBill = new NewBill({
@@ -168,7 +171,9 @@ describe("Then we are on employee page", () => {
       
       const getSpy = jest.spyOn( mockStore.bills(), "post")
       mockStore.bills().post(bill)
+      // On vérifie si la fonction soit appelée une fois
       expect(getSpy).toHaveBeenCalledTimes(1)
+      // On vérifie si la fonction soit appelée avec 'bill'
       expect(getSpy).toHaveBeenLastCalledWith(bill)
     })  
 })
